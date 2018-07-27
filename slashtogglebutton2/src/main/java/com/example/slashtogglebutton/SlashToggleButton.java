@@ -1,7 +1,9 @@
 package com.example.slashtogglebutton;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,6 +33,8 @@ public class SlashToggleButton extends View {
         mPaint = new Paint();
         mPaint.setDither(true);
         mPaint.setAntiAlias(true);
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs,R.styleable.SlashToggleButton,0,0);
+        iconBitmap = BitmapFactory.decodeResource(getResources(),typedArray.getResourceId(R.styleable.SlashToggleButton_icon,0));
     }
     SlashToggleButton(Context context){
         super(context);
@@ -90,10 +94,6 @@ public class SlashToggleButton extends View {
         float x = event.getX();
         float y = event.getY();
         int c[] = new int[2];
-        getLocationOnScreen(c);
-//        x-=c[0];
-//        y-=c[1];
-        Log.d("center",c[0]+" "+c[1]);
 
         switch (event.getAction()){
             case MotionEvent.ACTION_UP:

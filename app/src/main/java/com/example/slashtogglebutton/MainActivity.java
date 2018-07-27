@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
 //        linearLayout.addView(slashToggleButton);
 
         SlashToggleButton slashToggleButton = findViewById(R.id.slash);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.baseline_screen_rotation_black_48);
-        slashToggleButton.setIconBitmap(bitmap);
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.baseline_screen_rotation_black_48);
+//        slashToggleButton.setIconBitmap(bitmap);
 
     }
 }
