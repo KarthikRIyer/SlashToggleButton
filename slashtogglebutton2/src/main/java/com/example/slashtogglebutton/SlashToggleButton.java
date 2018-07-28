@@ -21,7 +21,7 @@ import android.view.View;
 public class SlashToggleButton extends View {
 
     private Bitmap iconBitmap;
-    private boolean toggleState = false;
+    private boolean toggleState = true;
     private Bitmap mBitmap;
     private Paint mPaint;
     private Integer w,h;
@@ -35,6 +35,8 @@ public class SlashToggleButton extends View {
         mPaint.setAntiAlias(true);
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs,R.styleable.SlashToggleButton,0,0);
         iconBitmap = BitmapFactory.decodeResource(getResources(),typedArray.getResourceId(R.styleable.SlashToggleButton_icon,0));
+        init = 1;
+        toggle();
     }
     SlashToggleButton(Context context){
         super(context);
@@ -43,32 +45,18 @@ public class SlashToggleButton extends View {
 
     protected void onDraw(Canvas canvas){
 
-        if((w == null && h == null) || (w == 0 && h == 0)){
-//         w = this.getMeasuredWidth();
-//         h = this.getMeasuredHeight();
-//            w = this.getWidth();
-//            h = this.getHeight();
-//         if(w == 0 && h == 0){
-             w = iconBitmap.getWidth();
-             h = iconBitmap.getHeight();
-            Log.d("Width Height: ",w+" "+h);
-//         }
-        }
-
-        if(true){
-            if(!toggleState){
-                if(iconBitmap != null)
-                    drawFalseToggleState();
-            }else {
-                if(iconBitmap != null)
-                    drawTrueToggleState();
-            }
-        }
-
-        if(mBitmap!=null)
-        canvas.drawBitmap(mBitmap,0,0,mPaint);
-
         super.onDraw(canvas);
+
+        if(iconBitmap != null && (init == 1)) {
+
+            if (mBitmap != null)
+                canvas.drawBitmap(mBitmap, 0, 0, mPaint);
+
+            Log.d("TAG","HERE");
+
+            init = 0;
+
+        }
 
     }
 
@@ -86,14 +74,20 @@ public class SlashToggleButton extends View {
 
     private void toggle(){
         toggleState = !toggleState;
-        invalidate();
+        init = 1;
+        if (!toggleState) {
+            if (iconBitmap != null)
+                drawFalseToggleState();
+        } else {
+            if (iconBitmap != null)
+                drawTrueToggleState();
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event){
 
         float x = event.getX();
         float y = event.getY();
-        int c[] = new int[2];
 
         switch (event.getAction()){
             case MotionEvent.ACTION_UP:
@@ -109,11 +103,19 @@ public class SlashToggleButton extends View {
 
     public void setIconBitmap(Bitmap bitmap){
         iconBitmap = bitmap;
-        init = 0;
-        invalidate();
+        toggle();
     }
 
     private void drawTrueToggleState(){
+
+        if ((w == null && h == null) || (w == 0 && h == 0)) {
+
+            w = iconBitmap.getWidth();
+            h = iconBitmap.getHeight();
+            Log.d("Width Height: ", w + " " + h);
+
+        }
+
         mBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(mBitmap);
         int centerX = (canvas.getWidth() - iconBitmap.getWidth())/2;
@@ -123,6 +125,15 @@ public class SlashToggleButton extends View {
     }
 
     private void drawFalseToggleState(){
+
+        if ((w == null && h == null) || (w == 0 && h == 0)) {
+
+            w = iconBitmap.getWidth();
+            h = iconBitmap.getHeight();
+            Log.d("Width Height: ", w + " " + h);
+
+        }
+
         mBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(mBitmap);
         Paint paintAlpha = new Paint();
