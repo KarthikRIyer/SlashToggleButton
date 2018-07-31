@@ -8,7 +8,7 @@
     android:id="@+id/constraintLayout"
     tools:context="com.example.slashtogglebutton.MainActivity">
 
-    <com.example.slashtogglebutton.SlashToggleButton
+    <com.example.slashtogglebutton.SlashBtn2
         android:id="@+id/slash"
         android:layout_width="100px"
         android:layout_height="100px"
@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        custom:icon="@mipmap/baseline_screen_rotation_black_48"></com.example.slashtogglebutton.SlashToggleButton>
+        custom:icon="@mipmap/baseline_screen_rotation_black_48"/>
 
 
 </android.support.constraint.ConstraintLayout>

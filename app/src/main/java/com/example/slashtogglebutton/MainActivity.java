@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +22,14 @@ public class MainActivity extends AppCompatActivity {
 //        LinearLayout linearLayout = findViewById(R.id.constraintLayout);
 //        linearLayout.addView(slashToggleButton);
 
-        SlashToggleButton slashToggleButton = findViewById(R.id.slash);
+        final SlashBtn2 slashToggleButton = findViewById(R.id.slash);
+
+        slashToggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slashToggleButton.toggle();
+            }
+        });
 //        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.baseline_screen_rotation_black_48);
 //        slashToggleButton.setIconBitmap(bitmap);
 
