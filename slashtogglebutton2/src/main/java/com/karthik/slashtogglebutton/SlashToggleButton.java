@@ -1,4 +1,4 @@
-package com.example.slashtogglebutton;
+package com.karthik.slashtogglebutton;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -67,8 +67,8 @@ public class SlashToggleButton extends View {
         whitePaint.setColor(Color.WHITE);
         whitePaint.setAntiAlias(true);
         whitePaint.setStrokeWidth(thickness);
-        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SlashToggleButton, 0, 0);
-        iconBitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.SlashToggleButton_icon, 0));
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, com.example.slashtogglebutton.R.styleable.SlashToggleButton, 0, 0);
+        iconBitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(com.example.slashtogglebutton.R.styleable.SlashToggleButton_icon, 0));
         initHandler();
     }
 
