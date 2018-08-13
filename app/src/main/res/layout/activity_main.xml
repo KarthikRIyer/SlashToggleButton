@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/constraintLayout"
     tools:context="com.example.slashtogglebutton.MainActivity">
 
-    <com.example.slashtogglebutton.SlashBtn2
+    <com.example.slashtogglebutton.SlashToggleButton
         android:id="@+id/slash"
         android:layout_width="100px"
         android:layout_height="100px"
@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        custom:icon="@mipmap/baseline_screen_rotation_black_48"/>
+        custom:icon="@mipmap/baseline_screen_rotation_black_48" />
 
 
 </android.support.constraint.ConstraintLayout>

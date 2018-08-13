@@ -1,202 +1,162 @@
 package com.example.slashtogglebutton;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PathEffect;
-import android.graphics.PathMeasure;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by Karthik Iyer on 27-07-2018.
+ * Created by karthik on 31/7/18.
  */
 
 public class SlashToggleButton extends View {
 
+    private static final int FPS = 60;
+
+    private Handler handler;
+    private Runnable r;
     private Bitmap iconBitmap;
     private boolean toggleState = false;
-    private Bitmap mBitmap;
-    private Paint mPaint,linePaint;
-    private Path linePath;
-    private Integer w,h;
-    private float length;
-    int a = 0, b = 0,initial = 1;
-    Handler handler = new Handler();
+    private Paint mPaint, linePaint, clearPaint,whitePaint;
+    private int thickness = 12;
+    private float currX, currY, margin = 6;
 
-    SlashToggleButton(Context context, AttributeSet attrs){
-        super(context,attrs);
+    public SlashToggleButton(Context context) {
+        super(context);
         mPaint = new Paint();
         mPaint.setDither(true);
         mPaint.setAntiAlias(true);
+        mPaint.setStrokeWidth(thickness/2);
         linePaint = new Paint();
-        linePaint.setStrokeWidth(12);
+        linePaint.setDither(true);
+        linePaint.setAntiAlias(true);
+        linePaint.setStrokeWidth(thickness/2);
         linePaint.setColor(Color.BLACK);
         linePaint.setAlpha(120);
-        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs,R.styleable.SlashToggleButton,0,0);
-        iconBitmap = BitmapFactory.decodeResource(getResources(),typedArray.getResourceId(R.styleable.SlashToggleButton_icon,0));
-        initial = 1;
-        toggle();
+        whitePaint = new Paint();
+        whitePaint.setDither(true);
+        whitePaint.setColor(Color.WHITE);
+        whitePaint.setAntiAlias(true);
+        whitePaint.setStrokeWidth(thickness);
+        initHandler();
     }
-    SlashToggleButton(Context context){
-        super(context);
+
+    public SlashToggleButton(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
         mPaint = new Paint();
+        mPaint.setDither(true);
+        mPaint.setAntiAlias(true);
+        mPaint.setStrokeWidth(thickness/2);
         linePaint = new Paint();
-        linePaint.setStrokeWidth(12);
+        linePaint.setDither(true);
+        linePaint.setAntiAlias(true);
+        linePaint.setStrokeWidth(thickness/2);
+        linePaint.setColor(Color.BLACK);
         linePaint.setAlpha(120);
+        whitePaint = new Paint();
+        whitePaint.setDither(true);
+        whitePaint.setColor(Color.WHITE);
+        whitePaint.setAntiAlias(true);
+        whitePaint.setStrokeWidth(thickness);
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SlashToggleButton, 0, 0);
+        iconBitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(R.styleable.SlashToggleButton_icon, 0));
+        initHandler();
     }
 
-    protected void onDraw(Canvas canvas){
+    public SlashToggleButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
 
+    public void initHandler() {
+
+        handler = new Handler();
+
+        r = new Runnable() {
+            @Override
+            public void run() {
+
+                invalidate();
+
+                handler.postDelayed(r, 1000 / FPS);
+
+            }
+        };
+
+        currX = currY = margin;
+
+        clearPaint = new Paint();
+        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(iconBitmap != null && (initial == 1)) {
-
-            if (mBitmap != null)
-                canvas.drawBitmap(mBitmap, 0, 0, mPaint);
-
-            initial = 0;
-
-        }
-
-    }
-
-    private void refresh(){
-
-        if(!toggleState){
-            if(iconBitmap != null)
-                drawFalseToggleState();
-        }else {
-            if(iconBitmap != null)
-                drawTrueToggleState();
-        }
-
-    }
-
-    private void toggle(){
-        toggleState = !toggleState;
-        initial = 1;
         if (!toggleState) {
-            if (iconBitmap != null)
-                drawFalseToggleState();
+            //true
+            canvas.drawBitmap(iconBitmap, 0, 0, mPaint);
+
+            if (currX > margin) {
+
+                currX -= 5;
+                currY -= 5;
+            } else {
+                handler.removeCallbacksAndMessages(null);
+            }
+            canvas.drawLine(margin,margin,currX,currY,whitePaint);
+            canvas.drawLine(margin + margin/2, margin + margin/2, currX + margin/2, currY + margin/2, mPaint);
+
         } else {
-            if (iconBitmap != null)
-                drawTrueToggleState();
+            //false
+            canvas.drawBitmap(iconBitmap, 0, 0, linePaint);
+            if (currX <= iconBitmap.getWidth() - margin) {
+
+                currX += 5;
+                currY += 5;
+            } else {
+                handler.removeCallbacksAndMessages(null);
+            }
+            canvas.drawLine(margin,margin,currX,currY,whitePaint);
+            canvas.drawLine(margin + margin/2, margin + margin/2, currX + margin/2, currY + margin/2, linePaint);
         }
+
     }
 
-    public boolean onTouchEvent(MotionEvent event){
+    public void toggle() {
 
-        float x = event.getX();
-        float y = event.getY();
+        toggleState = !toggleState;
 
-        switch (event.getAction()){
-            case MotionEvent.ACTION_UP:
-                if(x>0 && x<w && y>0 && y<h) {
-                    toggle();
-                    refresh();
-                    invalidate();
-                }
-                break;
-        }
-        return true;
+        r.run();
+
     }
 
     public void setIconBitmap(Bitmap bitmap){
+
         iconBitmap = bitmap;
-        toggle();
+        initHandler();
+
     }
 
-    private void drawTrueToggleState(){
+    public void setToggleState(boolean bool){
 
-        if ((w == null && h == null) || (w == 0 && h == 0)) {
+        toggleState = bool;
 
-            w = iconBitmap.getWidth();
-            h = iconBitmap.getHeight();
-            Log.d("Width Height: ", w + " " + h);
-
-        }
-
-        mBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(mBitmap);
-        int centerX = (canvas.getWidth() - iconBitmap.getWidth())/2;
-        int centerY = (canvas.getHeight() - iconBitmap.getHeight())/2;
-        canvas.drawBitmap(iconBitmap,centerX,centerY,mPaint);
-        invalidate();
     }
 
-    private void drawFalseToggleState(){
+    public void setMargin(int m){
 
-        if ((w == null && h == null) || (w == 0 && h == 0)) {
+        margin = m;
 
-            w = iconBitmap.getWidth();
-            h = iconBitmap.getHeight();
-            Log.d("Width Height: ", w + " " + h);
-
-        }
-
-        mBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(mBitmap);
-        Paint paintAlpha = new Paint();
-        paintAlpha.setAlpha(120);
-        int centerX = (canvas.getWidth() - iconBitmap.getWidth())/2;
-        int centerY = (canvas.getHeight() - iconBitmap.getHeight())/2;
-        canvas.drawBitmap(iconBitmap,centerX,centerY,paintAlpha);
-        paintAlpha.setStrokeWidth(12);
-        paintAlpha.setStrokeCap(Paint.Cap.ROUND);
-//        if(a<=w && b<=h){
-//            canvas.drawLine(0,0,w,h,paintAlpha);
-//            a++;b+=(h/w);
-//            initial = 1;
-//            postInvalidateDelayed(15);
-//        }
-
-        linePath = new Path();
-        linePath.moveTo(0,0);
-        linePath.lineTo(w,h);
-        drawLine();
-        PathMeasure measure = new PathMeasure(linePath,false);
-        length = measure.getLength();
-        float[] intervals = new float[]{length,length};
-        ObjectAnimator animator = ObjectAnimator.ofFloat(SlashToggleButton.this,"phase",1.0f,0.0f);
-        animator.setDuration(300);
-        animator.start();
     }
-
-    private void drawLine(){
-        Canvas canvas = new Canvas(mBitmap);
-        canvas.drawPath(linePath,new Paint());
-        initial = 1;
-        invalidate();
-    }
-
-    public void setPhase(float phase){
-        linePaint.setPathEffect(createPathEffect(length,phase,0.0f));
-        Log.d("TAG","HERE");
-        drawLine();
-    }
-
-    private static PathEffect createPathEffect(float pathLength, float phase, float offset)
-    {
-        return new DashPathEffect(new float[] { pathLength, pathLength },
-                Math.max(phase * pathLength, offset));
-    }
-
-    public boolean getToggleState(){
-        return toggleState;
-    }
-
 
 
 }
