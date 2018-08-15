@@ -13,7 +13,7 @@ dependencies {
     compile 'com.karthik.slashtogglebutton:slashtogglebutton:1.0.0'
 }
 ```
-## Example Usage 1
+## Example Usage 
 ### XML
 Create a custom xml namespace.
 ```
