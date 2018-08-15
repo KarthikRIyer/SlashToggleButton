@@ -7,14 +7,6 @@
 This library lets make a simple toggle button with an icon of your choice and an animated slash.<br/>
 
 # Usage
-Add this to your project build.gradle file.
-```
-repositories {
-    maven {
-        url 'https://dl.bintray.com/karthikriyer/maven/'
-    }
-}
-```
 Add this to your app build.gradle file.
 ```
 dependencies {
