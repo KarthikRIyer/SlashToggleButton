@@ -1,1 +1,1 @@
-include ':app', ':slashtogglebutton2'
+include ':app', ':slashtogglebutton'

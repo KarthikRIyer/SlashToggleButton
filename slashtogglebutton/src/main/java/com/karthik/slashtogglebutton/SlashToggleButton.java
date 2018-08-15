@@ -67,8 +67,8 @@ public class SlashToggleButton extends View {
         whitePaint.setColor(Color.WHITE);
         whitePaint.setAntiAlias(true);
         whitePaint.setStrokeWidth(thickness);
-        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, com.example.slashtogglebutton.R.styleable.SlashToggleButton, 0, 0);
-        iconBitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(com.example.slashtogglebutton.R.styleable.SlashToggleButton_icon, 0));
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, com.karthik.slashtogglebutton.R.styleable.SlashToggleButton, 0, 0);
+        iconBitmap = BitmapFactory.decodeResource(getResources(), typedArray.getResourceId(com.karthik.slashtogglebutton.R.styleable.SlashToggleButton_icon, 0));
         initHandler();
     }
 
@@ -155,6 +155,12 @@ public class SlashToggleButton extends View {
     public void setMargin(int m){
 
         margin = m;
+
+    }
+
+    public void setToggle(boolean t){
+
+        toggleState = t;
 
     }
 
